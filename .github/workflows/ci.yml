@@ -1,0 +1,28 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Unit tests (component level)
+        run: make unit
+      - name: System tests (SIL) + traceability report
+        run: make system
+      - name: Coverage
+        run: make coverage
+      - name: Bug injection must be detected
+        run: |
+          make clean
+          make system EXTRA=-DFC_INJECT_BUG_OVERFLOW && { echo "suite did not catch the injected bug"; exit 1; } || echo "bug caught - OK"
+          make clean
+      - name: Predictive maintenance (ML)
+        run: make ml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: build/*.csv
