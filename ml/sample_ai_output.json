@@ -1,0 +1,15 @@
+{
+  "test_cases": [
+    {"title": "Hygiene flush and user arrival in the same tick", "requirement": "REQ-05", "technique": "ST",
+     "preconditions": "Default config, clock 0", "steps": ["ADV 259199990", "PRES 1", "ADV 10", "STAT"],
+     "expected": "valve=0, state=OCCUPIED", "risk": "high",
+     "rationale": "Race between hygiene timer and presence edge is not covered."},
+    {"title": "Battery recovers inside hysteresis band", "requirement": "REQ-07", "technique": "BVA",
+     "preconditions": "Default config", "steps": ["BATT 3990", "ADV 10", "BATT 4099", "ADV 10", "STAT"],
+     "expected": "err has 0x04 set (cut-off still active)", "risk": "medium",
+     "rationale": "Upper hysteresis boundary 4100 mV only tested from one side."},
+    {"title": "Water quality report to the cloud", "requirement": "REQ-11", "technique": "UC",
+     "preconditions": "-", "steps": ["Open the app"], "expected": "report visible", "risk": "low",
+     "rationale": "Example of a hallucinated requirement - must be rejected by the gate."}
+  ]
+}
