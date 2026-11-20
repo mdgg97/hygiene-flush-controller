@@ -1,0 +1,6 @@
+build/
+__pycache__/
+*.gcov
+*.gcda
+*.gcno
+.pytest_cache/
